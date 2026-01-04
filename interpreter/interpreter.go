@@ -3,6 +3,7 @@ package interpreter
 import (
 	"errors"
 	"fmt"
+	"hachimi-lang/template"
 	"sort"
 	"strconv"
 	"strings"
@@ -20,12 +21,12 @@ type CommandCode struct {
 }
 
 var Tokenize = []string{
-	"哈基米",
-	"南北绿豆",
-	"阿西卡",
-	"奶龙",
-	"曼波",
-	"叮咚鸡",
+	template.MOVER,
+	template.INCMOVEL,
+	template.JMP0,
+	template.JMPTAG,
+	template.INPUT,
+	template.OUTPUT,
 }
 
 func Parser(AllCode string) ([]string, error) {
@@ -92,10 +93,10 @@ func getJmpIDX(currentIdx int, commandList []string) int {
 	depth := 0
 	for {
 		currentIdx--
-		if commandList[currentIdx] == "曼波" {
+		if commandList[currentIdx] == template.JMP0 {
 			depth++
 		}
-		if commandList[currentIdx] == "奶龙" {
+		if commandList[currentIdx] == template.JMPTAG {
 			if depth == 0 {
 				return currentIdx
 			} else {
@@ -113,7 +114,7 @@ func (cm *ComputerModel) Compile() ([]CommandCode, error) {
 	//fmt.Println(commandList)
 	machineCode := make([]CommandCode, 0)
 	for idx, cmd := range commandList {
-		if cmd != "曼波" {
+		if cmd != template.JMP0 {
 			machineCode = append(machineCode, CommandCode{
 				Name: cmd,
 				Tag:  0,
@@ -122,7 +123,7 @@ func (cm *ComputerModel) Compile() ([]CommandCode, error) {
 			//遇到跳转指令，寻找对应的跳转位置
 			jmpIdx := getJmpIDX(idx, commandList)
 			if jmpIdx == -1 {
-				return nil, errors.New("曼波找不到奶龙的位置！")
+				return nil, errors.New(fmt.Sprintf("%v 找不到 %v 的位置！", template.JMP0, template.JMPTAG))
 			}
 			machineCode = append(machineCode, CommandCode{
 				Name: cmd,
@@ -142,17 +143,17 @@ func (cm *ComputerModel) Run() error {
 	for pc < len(machineCode) {
 		cmd := machineCode[pc]
 		switch cmd.Name {
-		case "哈基米":
+		case template.MOVER:
 			err = cm.OperatorR()
-		case "南北绿豆":
+		case template.INPUT:
 			err = cm.OperatorInbox()
-		case "阿西卡":
+		case template.INCMOVEL:
 			err = cm.OperatorLambda()
-		case "叮咚鸡":
+		case template.OUTPUT:
 			fmt.Println("O<", cm.DataTape[cm.Ptr])
-		case "奶龙":
+		case template.JMPTAG:
 			// 不管
-		case "曼波":
+		case template.JMP0:
 			//无条件跳转
 			if cm.DataTape[cm.Ptr] != 0 {
 				pc = cmd.Tag
