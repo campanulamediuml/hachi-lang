@@ -11,7 +11,7 @@ windows: dist/hachimi.exe
 
 
 运行命令:  
-``` hachimi [filename.hachi] ```   
+``` ./hachimi [filename.hachi] ```   
 filename.hachi: 需要运行的.hachi后缀的hachimi语言代码文件  
 -h: 显示帮助信息
 
