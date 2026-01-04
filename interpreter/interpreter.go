@@ -64,9 +64,9 @@ func Parser(AllCode string) ([]string, error) {
 
 			if !matched {
 				// 无法匹配任何token，打印错误信息
-				fmt.Printf("解析错误：位置 %d:%d 处遇到未定义的词汇 '%c'\n", line+1, i, code[i])
+				fmt.Printf("哈气：位置 %d:%d 被哈气了！ '%c'\n", line+1, i, code[i])
 				// 跳过当前字符继续解析
-				return nil, errors.New("解析错误：遇到未定义的词汇")
+				return nil, errors.New("哈基耄耋不开心了！")
 			}
 		}
 	}
@@ -122,7 +122,7 @@ func (cm *ComputerModel) Compile() ([]CommandCode, error) {
 			//遇到跳转指令，寻找对应的跳转位置
 			jmpIdx := getJmpIDX(idx, commandList)
 			if jmpIdx == -1 {
-				return nil, errors.New("跳转指令匹配错误")
+				return nil, errors.New("曼波找不到奶龙的位置！")
 			}
 			machineCode = append(machineCode, CommandCode{
 				Name: cmd,
@@ -159,7 +159,7 @@ func (cm *ComputerModel) Run() error {
 				continue
 			}
 		default:
-			return errors.New("未知指令")
+			return errors.New("哈基米？哈基米？哈基米？？？？？")
 		}
 		if err != nil {
 			return err
@@ -171,18 +171,20 @@ func (cm *ComputerModel) Run() error {
 }
 
 func (cm *ComputerModel) OperatorR() error {
-	if cm.Ptr >= len(cm.DataTape)-1 {
-		return errors.New("数据指针越界")
+	if cm.Ptr == len(cm.DataTape)-1 {
+		cm.Ptr = 0
+		return nil
 	}
 	cm.Ptr++
 	return nil
 }
 
 func (cm *ComputerModel) OperatorLambda() error {
-	if cm.Ptr <= 0 {
-		return errors.New("数据指针越界")
-	}
 	cm.DataTape[cm.Ptr]++
+	if cm.Ptr == 0 {
+		cm.Ptr = len(cm.DataTape) - 1
+		return nil
+	}
 	cm.Ptr--
 	return nil
 }
