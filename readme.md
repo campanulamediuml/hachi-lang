@@ -5,6 +5,11 @@
 哈基语是一种基于lambda算子的图灵完备语言，虚拟机支持最长65536字节的内存地址进行操作。
 
 ## 哈基语虚拟机使用说明:
+二进制文件：  
+linux: dist/hachimi  
+windows: dist/hachimi.exe
+
+
 运行命令:  
 ``` hachimi [filename.hachi] ```   
 filename.hachi: 需要运行的.hachi后缀的hachimi语言代码文件  
