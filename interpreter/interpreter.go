@@ -139,9 +139,9 @@ func (cm *ComputerModel) Run() error {
 	if err != nil {
 		return err
 	}
-	pc := 0
-	for pc < len(machineCode) {
-		cmd := machineCode[pc]
+	head := 0
+	for head < len(machineCode) {
+		cmd := machineCode[head]
 		switch cmd.Name {
 		case template.MOVER:
 			err = cm.OperatorR()
@@ -156,7 +156,7 @@ func (cm *ComputerModel) Run() error {
 		case template.JMP0:
 			//无条件跳转
 			if cm.DataTape[cm.Ptr] != 0 {
-				pc = cmd.Tag
+				head = cmd.Tag
 				continue
 			}
 		default:
@@ -165,7 +165,7 @@ func (cm *ComputerModel) Run() error {
 		if err != nil {
 			return err
 		}
-		pc++
+		head++
 	}
 
 	return nil
